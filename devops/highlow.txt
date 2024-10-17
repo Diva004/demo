@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Display welcome message
+echo "Welcome to the High-Low Game!"
+echo "Guess a number between 1 and 5."
+
+# Main game loop
+while true; 
+do
+    # Generate a random number between 1 and 100
+    target_number=$(( RANDOM % 5 ))
+    attempts=0
+    guessed=false
+
+    # Start guessing loop
+    while [ "$guessed" == false ]
+    do
+        read -p "Enter your guess: " user_guess
+        
+        # Increment the attempt counter
+        ((attempts++))
+
+        # Validate the input
+        if ! [[ "$user_guess" =~ ^[0-9]+$ ]] || [ "$user_guess" -lt 1 ] || [ "$user_guess" -gt 5 ]; 
+        then
+            echo "Please enter a valid number between 1 and 5."
+            continue
+        fi
+
+        # Check the user's guess against the target number
+        if [ "$user_guess" -lt "$target_number" ]; then
+            echo "Too low! Try again."
+        elif [ "$user_guess" -gt "$target_number" ]; then
+            echo "Too high! Try again."
+        else
+            echo "Congratulations! You've guessed the number $target_number in $attempts attempts!"
+            guessed=true
+        fi
+    done
+
+    # Ask if the player wants to play again
+    read -p "Do you want to play again? (yes/no): " play_again
+    if [[ "$play_again" != "yes" ]]; then
+        echo "Thank you for playing! Goodbye!"
+        break
+    fi
+done
